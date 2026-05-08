@@ -7,6 +7,8 @@ document.addEventListener("keydown", (e) => {
     console.log(e.key);
     if (keyPress.length == 1 && lettersPattern.test(e.key)) {
         updateLetters(keyPress);
+    } else if (e.key == "Backspace") {
+        deleteFromLetters();
     }
 });
 
@@ -22,4 +24,14 @@ const updateLetters = (letter) => {
 const updateTiles = (tileNumber, letter) => {
     let currentTile = document.querySelector("#guessTile" + tileNumber);
     currentTile.innerText = letter;
+};
+
+const deleteFromLetters = () => {
+    let oldLetters = currentGuess.dataset.letters;
+    let newLetters = oldLetters.slice(0, -1);
+    deleteFromTiles(oldLetters.length);
+};
+
+const deleteFromTiles = (tileNumber) => {
+    document.querySelector("#guessTile" + tileNumber).innerText = "";
 };
