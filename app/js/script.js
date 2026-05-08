@@ -6,13 +6,20 @@ document.addEventListener("keydown", (e) => {
     let keyPress = e.key;
     console.log(e.key);
     if (keyPress.length == 1 && lettersPattern.test(e.key)) {
-        // console.log("is letter");
         updateLetters(keyPress);
     }
 });
 
 const updateLetters = (letter) => {
-    currentGuess.dataset.letters = currentGuess.dataset.letters + letter;
+    let oldLetters = currentGuess.dataset.letters;
+    let newLetters = oldLetters + letter;
+    let currentTile = newLetters.length;
+    currentGuess.dataset.letters = newLetters;
+    console.log("currentTile = " + currentTile);
+    updateTiles(currentTile, letter);
 };
 
-const updateTiles = () => {};
+const updateTiles = (tileNumber, letter) => {
+    let currentTile = document.querySelector("#guessTile" + tileNumber);
+    currentTile.innerText = letter;
+};
