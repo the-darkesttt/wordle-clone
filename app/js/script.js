@@ -14,7 +14,6 @@ console.log(solutionWord);
 
 document.addEventListener("keydown", (e) => {
     let keyPress = e.key;
-    console.log(e.key);
     if (
         keyPress.length == 1 &&
         lettersPattern.test(e.key) &&
@@ -23,6 +22,11 @@ document.addEventListener("keydown", (e) => {
         updateLetters(keyPress);
     } else if (e.key == "Backspace" && currentGuess.dataset.letters != "") {
         deleteFromLetters();
+    } else if (e.key == "Enter" && currentGuess.dataset.letters.length == 5) {
+        for (let i = 0; i < 5; i++) {
+            checkLetter(i);
+            console.log(checkLetter(i));
+        }
     }
 });
 
@@ -31,7 +35,6 @@ const updateLetters = (letter) => {
     let newLetters = oldLetters + letter;
     let currentTile = newLetters.length;
     currentGuess.dataset.letters = newLetters;
-    console.log("currentTile = " + currentTile);
     updateTiles(currentTile, letter);
 };
 
@@ -49,4 +52,18 @@ const deleteFromLetters = () => {
 
 const deleteFromTiles = (tileNumber) => {
     document.querySelector("#guessTile" + tileNumber).innerText = "";
+};
+
+const checkLetter = (position) => {
+    let guessedLetter = currentGuess.dataset.letters.charAt(position);
+    let solutionLetter = solutionWord.charAt(position);
+    if (guessedLetter == solutionLetter) {
+        return "correct";
+    } else {
+        return checkLetterExists(guessedLetter) ? "pressent" : "absent";
+    }
+};
+
+const checkLetterExists = (letter) => {
+    return solutionWord.includes(letter);
 };
