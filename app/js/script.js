@@ -24,8 +24,9 @@ document.addEventListener("keydown", (e) => {
         deleteFromLetters();
     } else if (e.key == "Enter" && currentGuess.dataset.letters.length == 5) {
         for (let i = 0; i < 5; i++) {
-            checkLetter(i);
-            console.log(checkLetter(i));
+            setTimeout(() => {
+                revealTile(i, checkLetter(i));
+            }, i * 200);
         }
     }
 });
@@ -60,10 +61,28 @@ const checkLetter = (position) => {
     if (guessedLetter == solutionLetter) {
         return "correct";
     } else {
-        return checkLetterExists(guessedLetter) ? "pressent" : "absent";
+        return checkLetterExists(guessedLetter) ? "present" : "absent";
     }
 };
 
 const checkLetterExists = (letter) => {
     return solutionWord.includes(letter);
+};
+
+const revealTile = (i, state) => {
+    let tileNumber = i + 1;
+    let tile = document.querySelector("#guessTile" + tileNumber);
+    flipTile(tileNumber, state);
+};
+
+const flipTile = (tileNum, state) => {
+    let tile = document.querySelector("#guessTile" + tileNum);
+    tile.classList.add("flip-in");
+    setTimeout(() => {
+        tile.classList.add(state);
+    }, 250);
+    setTimeout(() => {
+        tile.classList.remove("flip-in");
+        tile.classList.add("flip-out");
+    }, 250);
 };
