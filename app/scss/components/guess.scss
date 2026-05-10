@@ -18,6 +18,11 @@
         font-weight: 600;
     }
 
+    .has-letter {
+        border-color: hsl(0, 0%, 40%);
+        animation: blinkScale 0.2s ease;
+    }
+
     .correct {
         background-color: hsl(102, 86%, 36%);
         border-color: hsl(102, 73%, 25%);

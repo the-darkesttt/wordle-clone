@@ -42,6 +42,7 @@ const updateLetters = (letter) => {
 const updateTiles = (tileNumber, letter) => {
     let currentTile = document.querySelector("#guessTile" + tileNumber);
     currentTile.innerText = letter;
+    currentTile.classList.add("has-letter");
 };
 
 const deleteFromLetters = () => {
@@ -52,7 +53,9 @@ const deleteFromLetters = () => {
 };
 
 const deleteFromTiles = (tileNumber) => {
-    document.querySelector("#guessTile" + tileNumber).innerText = "";
+    let currentTile = document.querySelector("#guessTile" + tileNumber);
+    currentTile.innerText = "";
+    currentTile.classList.remove("has-letter");
 };
 
 const checkLetter = (position) => {
@@ -77,6 +80,7 @@ const revealTile = (i, state) => {
 
 const flipTile = (tileNum, state) => {
     let tile = document.querySelector("#guessTile" + tileNum);
+    tile.classList.remove("has-letter");
     tile.classList.add("flip-in");
     setTimeout(() => {
         tile.classList.add(state);

@@ -25,3 +25,18 @@
     animation: flip-out 250ms;
     animation-fill-mode: forwards;
 }
+
+@keyframes blinkScale {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.10);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
