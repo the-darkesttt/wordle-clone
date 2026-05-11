@@ -23,13 +23,32 @@ document.addEventListener("keydown", (e) => {
     } else if (e.key == "Backspace" && currentGuess.dataset.letters != "") {
         deleteFromLetters();
     } else if (e.key == "Enter" && currentGuess.dataset.letters.length == 5) {
-        for (let i = 0; i < 5; i++) {
-            setTimeout(() => {
-                revealTile(i, checkLetter(i));
-            }, i * 200);
-        }
+        submitGuess();
     }
 });
+
+const submitGuess = () => {
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            revealTile(i, checkLetter(i));
+        }, i * 200);
+    }
+};
+
+const checkIfGuessComplete = (i) => {
+    if (i == 4) {
+        checkWin();
+    }
+};
+
+const checkWin = () => {
+    if (solutionWord == currentGuess.dataset.letters) {
+        console.log("game won");
+    } else {
+        currentGuessCount++;
+        currentGuess = document.querySelector("#guess" + currentGuessCount);
+    }
+};
 
 const updateLetters = (letter) => {
     let oldLetters = currentGuess.dataset.letters;
@@ -40,7 +59,9 @@ const updateLetters = (letter) => {
 };
 
 const updateTiles = (tileNumber, letter) => {
-    let currentTile = document.querySelector("#guessTile" + tileNumber);
+    let currentTile = document.querySelector(
+        "#guess" + currentGuessCount + "Tile" + tileNumber,
+    );
     currentTile.innerText = letter;
     currentTile.classList.add("has-letter");
 };
@@ -53,7 +74,9 @@ const deleteFromLetters = () => {
 };
 
 const deleteFromTiles = (tileNumber) => {
-    let currentTile = document.querySelector("#guessTile" + tileNumber);
+    let currentTile = document.querySelector(
+        "#guess" + currentGuessCount + "Tile" + tileNumber,
+    );
     currentTile.innerText = "";
     currentTile.classList.remove("has-letter");
 };
@@ -76,10 +99,13 @@ const revealTile = (i, state) => {
     let tileNumber = i + 1;
     let tile = document.querySelector("#guessTile" + tileNumber);
     flipTile(tileNumber, state);
+    checkIfGuessComplete(i);
 };
 
 const flipTile = (tileNum, state) => {
-    let tile = document.querySelector("#guessTile" + tileNum);
+    let tile = document.querySelector(
+        "#guess" + currentGuessCount + "Tile" + tileNum,
+    );
     tile.classList.remove("has-letter");
     tile.classList.add("flip-in");
     setTimeout(() => {
@@ -89,4 +115,7 @@ const flipTile = (tileNum, state) => {
         tile.classList.remove("flip-in");
         tile.classList.add("flip-out");
     }, 250);
+    setTimeout(() => {
+        tile.classList.remove("flip-out");
+    }, 1500);
 };
