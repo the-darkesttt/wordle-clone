@@ -6,6 +6,7 @@
     gap: rem(3);
     width: rem(300);
     margin-bottom: rem(10);
+    user-select: none;
 
     &__tile {
         border: rem(2) solid hsl(0, 0%, 26%);

@@ -41,9 +41,21 @@ const checkIfGuessComplete = (i) => {
     }
 };
 
+const jumpTiles = () => {
+    for (let i = 1; i < 6; i++) {
+        setTimeout(() => {
+            let currentTile = document.querySelector(
+                "#guess" + currentGuessCount + "Tile" + i,
+            );
+            currentTile.classList.add("jump");
+        }, 200 * i);
+    }
+};
+
 const checkWin = () => {
     if (solutionWord == currentGuess.dataset.letters) {
         console.log("game won");
+        setTimeout(jumpTiles(), 500);
     } else {
         currentGuessCount++;
         currentGuess = document.querySelector("#guess" + currentGuessCount);
