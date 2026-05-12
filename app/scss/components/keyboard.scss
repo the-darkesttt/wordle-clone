@@ -24,4 +24,20 @@ button {
     color: hsl(0, 0%, 100%);
     font-size: rem(20);
     border-style: none;
+    user-select: none;
+}
+
+.button.correct {
+    background-color: hsl(102, 86%, 36%);
+    color: white;
+}
+
+.button.present {
+    background-color: hsl(49, 51%, 47%);
+    color: white;
+}
+
+.button.absent {
+    background-color: hsl(240, 2%, 23%);
+    color: white;
 }

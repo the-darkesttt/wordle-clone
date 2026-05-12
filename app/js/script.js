@@ -30,7 +30,7 @@ function handleKeyboardClick(key) {
             lettersPattern.test(key) &&
             currentGuess.dataset.letters.length < 5
         ) {
-            updateLetters(key);
+            updateLetters(key.toLowerCase());
         } else if (key == "Backspace" && currentGuess.dataset.letters != "") {
             deleteFromLetters();
         } else if (key == "Enter" && currentGuess.dataset.letters.length == 5) {
@@ -41,17 +41,22 @@ function handleKeyboardClick(key) {
 
 document.addEventListener("keydown", (e) => {
     let keyPress = e.key;
+    console.log(keyPress);
+
     if (currentGuessCount < 7) {
         if (
             keyPress.length == 1 &&
-            lettersPattern.test(e.key) &&
+            lettersPattern.test(keyPress) &&
             currentGuess.dataset.letters.length < 5
         ) {
-            updateLetters(keyPress);
-        } else if (e.key == "Backspace" && currentGuess.dataset.letters != "") {
+            updateLetters(keyPress.toLowerCase());
+        } else if (
+            keyPress == "Backspace" &&
+            currentGuess.dataset.letters != ""
+        ) {
             deleteFromLetters();
         } else if (
-            e.key == "Enter" &&
+            keyPress == "Enter" &&
             currentGuess.dataset.letters.length == 5
         ) {
             submitGuess();
@@ -150,8 +155,14 @@ const checkLetterExists = (letter) => {
 
 const revealTile = (i, state) => {
     let tileNumber = i + 1;
-    let tile = document.querySelector("#guessTile" + tileNumber);
+    let guessedLetter = currentGuess.dataset.letters[i];
+
     flipTile(tileNumber, state);
+
+    if (guessedLetter) {
+        updateKeyboardButton(guessedLetter, state);
+    }
+
     checkIfGuessComplete(i);
 };
 
@@ -171,4 +182,48 @@ const flipTile = (tileNum, state) => {
     setTimeout(() => {
         tile.classList.remove("flip-out");
     }, 1500);
+};
+
+const updateKeyboardButton = (letter, state) => {
+    const buttons = document.querySelectorAll(".button");
+
+    buttons.forEach((button) => {
+        const buttonLetter = button.textContent.trim().toLowerCase();
+
+        if (buttonLetter === letter.toLowerCase()) {
+            const currentState = getKeyboardButtonState(button);
+
+            if (shouldUpdateKeyboardState(currentState, state)) {
+                button.classList.remove("correct", "present", "absent");
+                button.classList.add(state);
+            }
+        }
+    });
+};
+
+const getKeyboardButtonState = (button) => {
+    if (button.classList.contains("correct")) {
+        return "correct";
+    }
+
+    if (button.classList.contains("present")) {
+        return "present";
+    }
+
+    if (button.classList.contains("absent")) {
+        return "absent";
+    }
+
+    return "";
+};
+
+const shouldUpdateKeyboardState = (currentState, newState) => {
+    const statePriority = {
+        "": 0,
+        absent: 1,
+        present: 2,
+        correct: 3,
+    };
+
+    return statePriority[newState] > statePriority[currentState];
 };
