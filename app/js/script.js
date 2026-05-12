@@ -14,16 +14,21 @@ console.log(solutionWord);
 
 document.addEventListener("keydown", (e) => {
     let keyPress = e.key;
-    if (
-        keyPress.length == 1 &&
-        lettersPattern.test(e.key) &&
-        currentGuess.dataset.letters.length < 5
-    ) {
-        updateLetters(keyPress);
-    } else if (e.key == "Backspace" && currentGuess.dataset.letters != "") {
-        deleteFromLetters();
-    } else if (e.key == "Enter" && currentGuess.dataset.letters.length == 5) {
-        submitGuess();
+    if (currentGuessCount < 7) {
+        if (
+            keyPress.length == 1 &&
+            lettersPattern.test(e.key) &&
+            currentGuess.dataset.letters.length < 5
+        ) {
+            updateLetters(keyPress);
+        } else if (e.key == "Backspace" && currentGuess.dataset.letters != "") {
+            deleteFromLetters();
+        } else if (
+            e.key == "Enter" &&
+            currentGuess.dataset.letters.length == 5
+        ) {
+            submitGuess();
+        }
     }
 });
 
@@ -54,12 +59,21 @@ const jumpTiles = () => {
 
 const checkWin = () => {
     if (solutionWord == currentGuess.dataset.letters) {
-        console.log("game won");
+        alert("Game won! Congrats");
         setTimeout(jumpTiles(), 500);
     } else {
         currentGuessCount++;
         currentGuess = document.querySelector("#guess" + currentGuessCount);
+        if (currentGuessCount == 7) {
+            showSolution();
+        }
     }
+};
+
+const showSolution = () => {
+    alert(
+        "Better luck next time. Solution word is " + "'" + solutionWord + "'",
+    );
 };
 
 const updateLetters = (letter) => {
