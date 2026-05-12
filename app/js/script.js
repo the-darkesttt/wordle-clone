@@ -2,15 +2,25 @@ const lettersPattern = /^[A-Za-z][A-Za-z0-9]*$/;
 let currentGuessCount = 1;
 let currentGuess = document.querySelector("#guess" + currentGuessCount);
 
-let words = ["baker", "store", "horse", "clone", "speak", "apple"];
 let solutionWord = "";
+
 const chooseWord = () => {
-    let randomItem = Math.floor(Math.random() * (words.length - 1)) + 1;
-    solutionWord = words[randomItem];
+    fetch(
+        "https://random-words-api.kushcreates.com/api?language=en&category=wordle&length=5&words=1&type=lowercase",
+    )
+        .then((response) => response.json())
+        .then((data) => {
+            solutionWord = data[0].word || data[0];
+            solutionWord = solutionWord.toLowerCase();
+            console.log("Solution word:", solutionWord);
+        })
+        .catch((error) => {
+            console.error("Error while choosing word:", error);
+            solutionWord = "apple";
+        });
 };
 
 chooseWord();
-console.log(solutionWord);
 
 const keyBoardButtons = document.querySelectorAll(".button");
 
@@ -33,7 +43,11 @@ function handleKeyboardClick(key) {
             updateLetters(key.toLowerCase());
         } else if (key == "Backspace" && currentGuess.dataset.letters != "") {
             deleteFromLetters();
-        } else if (key == "Enter" && currentGuess.dataset.letters.length == 5) {
+        } else if (
+            key == "Enter" &&
+            currentGuess.dataset.letters.length == 5 &&
+            solutionWord !== ""
+        ) {
             submitGuess();
         }
     }
@@ -41,7 +55,6 @@ function handleKeyboardClick(key) {
 
 document.addEventListener("keydown", (e) => {
     let keyPress = e.key;
-    console.log(keyPress);
 
     if (currentGuessCount < 7) {
         if (
@@ -57,7 +70,8 @@ document.addEventListener("keydown", (e) => {
             deleteFromLetters();
         } else if (
             keyPress == "Enter" &&
-            currentGuess.dataset.letters.length == 5
+            currentGuess.dataset.letters.length == 5 &&
+            solutionWord !== ""
         ) {
             submitGuess();
         }
@@ -65,11 +79,18 @@ document.addEventListener("keydown", (e) => {
 });
 
 const submitGuess = () => {
-    for (let i = 0; i < 5; i++) {
-        setTimeout(() => {
-            revealTile(i, checkLetter(i));
-        }, i * 200);
-    }
+    const guessedWord = currentGuess.dataset.letters.toLowerCase();
+    checkWordExists(guessedWord).then((wordExists) => {
+        if (!wordExists) {
+            alert("This word does not exist in the English dictionary");
+            return;
+        }
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                revealTile(i, checkLetter(i));
+            }, i * 200);
+        }
+    });
 };
 
 const checkIfGuessComplete = (i) => {
@@ -91,7 +112,7 @@ const jumpTiles = () => {
 
 const checkWin = () => {
     if (solutionWord == currentGuess.dataset.letters) {
-        alert("Game won! Congrats");
+        // alert("Game won! Congrats");
         setTimeout(jumpTiles(), 500);
     } else {
         currentGuessCount++;
@@ -151,6 +172,18 @@ const checkLetter = (position) => {
 
 const checkLetterExists = (letter) => {
     return solutionWord.includes(letter);
+};
+
+const checkWordExists = (word) => {
+    if (!/^[a-z]{5}$/.test(word)) {
+        return Promise.resolve(false);
+    }
+    return fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+        .then((response) => response.ok)
+        .catch((error) => {
+            console.error("Dictionary API error:", error);
+            return false;
+        });
 };
 
 const revealTile = (i, state) => {
