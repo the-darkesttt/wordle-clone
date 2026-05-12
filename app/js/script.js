@@ -12,6 +12,33 @@ const chooseWord = () => {
 chooseWord();
 console.log(solutionWord);
 
+const keyBoardButtons = document.querySelectorAll(".button");
+
+keyBoardButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        const keyValue = button.textContent.trim();
+        handleKeyboardClick(keyValue);
+    });
+});
+
+function handleKeyboardClick(key) {
+    console.log("Button pressed:", key);
+
+    if (currentGuessCount < 7) {
+        if (
+            key.length == 1 &&
+            lettersPattern.test(key) &&
+            currentGuess.dataset.letters.length < 5
+        ) {
+            updateLetters(key);
+        } else if (key == "Backspace" && currentGuess.dataset.letters != "") {
+            deleteFromLetters();
+        } else if (key == "Enter" && currentGuess.dataset.letters.length == 5) {
+            submitGuess();
+        }
+    }
+}
+
 document.addEventListener("keydown", (e) => {
     let keyPress = e.key;
     if (currentGuessCount < 7) {
