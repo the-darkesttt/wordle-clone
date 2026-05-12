@@ -1,0 +1,120 @@
+@keyframes flip-in {
+  from {
+    transform: rotateX(0deg);
+  }
+  to {
+    transform: rotateX(-90deg);
+  }
+}
+@keyframes flip-out {
+  from {
+    transform: rotateX(-90deg);
+  }
+  to {
+    transform: rotateX(0deg);
+  }
+}
+.flip-in {
+  animation: flip-in 250ms;
+  animation-fill-mode: forwards;
+}
+
+.flip-out {
+  animation: flip-out 250ms;
+  animation-fill-mode: forwards;
+}
+
+@keyframes blinkScale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes jump {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-0.625rem) scale(1.05);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+.jump {
+  animation: jump 250ms;
+  animation-fill-mode: forwards;
+}
+
+.shake {
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-8px);
+  }
+  40% {
+    transform: translateX(8px);
+  }
+  60% {
+    transform: translateX(-8px);
+  }
+  80% {
+    transform: translateX(8px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.625rem;
+  gap: 0.625rem;
+}
+
+.row1, .row2, .row3 {
+  display: flex;
+  gap: 0.625rem;
+}
+
+button {
+  height: 3.625rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.9375rem;
+  border-radius: 0.25rem;
+  background-color: hsl(200, 1%, 51%);
+  color: hsl(0, 0%, 100%);
+  font-size: 1.25rem;
+  border-style: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+.button.correct {
+  background-color: hsl(102, 86%, 36%);
+  color: white;
+}
+
+.button.present {
+  background-color: hsl(49, 51%, 47%);
+  color: white;
+}
+
+.button.absent {
+  background-color: hsl(240, 2%, 23%);
+  color: white;
+}/*# sourceMappingURL=keyboard.css.map */

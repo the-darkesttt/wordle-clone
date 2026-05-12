@@ -82,7 +82,7 @@ const submitGuess = () => {
     const guessedWord = currentGuess.dataset.letters.toLowerCase();
     checkWordExists(guessedWord).then((wordExists) => {
         if (!wordExists) {
-            alert("This word does not exist in the English dictionary");
+            shakeCurrentGuess();
             return;
         }
         for (let i = 0; i < 5; i++) {
@@ -259,4 +259,12 @@ const shouldUpdateKeyboardState = (currentState, newState) => {
     };
 
     return statePriority[newState] > statePriority[currentState];
+};
+
+const shakeCurrentGuess = () => {
+    currentGuess.classList.add("shake");
+
+    setTimeout(() => {
+        currentGuess.classList.remove("shake");
+    }, 400);
 };
