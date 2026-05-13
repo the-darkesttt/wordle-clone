@@ -93,6 +93,34 @@ const submitGuess = () => {
     });
 };
 
+function* colorCycleGenerator() {
+    const colors = ["#6aaa64", "#c9b458", "#787c7e", "#538d4e"];
+    let index = 0;
+    while (true) {
+        yield colors[index];
+        index++;
+        if (index >= colors.length) {
+            index = 0;
+        }
+    }
+}
+
+const consumeIteratorWithTimeout = (iterator, timeoutInSeconds, callback) => {
+    const startTime = Date.now();
+    const timeoutInMilliseconds = timeoutInSeconds * 1000;
+
+    const interval = setInterval(() => {
+        const currentTime = Date.now();
+        const elapsedTime = currentTime - startTime;
+        if (elapsedTime >= timeoutInMilliseconds) {
+            clearInterval(interval);
+            return;
+        }
+        const nextValue = iterator.next().value;
+        callback(nextValue);
+    }, 150);
+};
+
 const checkIfGuessComplete = (i) => {
     if (i == 4) {
         checkWin();
@@ -110,10 +138,24 @@ const jumpTiles = () => {
     }
 };
 
+const startWinColorEffect = () => {
+    const colorIterator = colorCycleGenerator();
+    consumeIteratorWithTimeout(colorIterator, 2, (color) => {
+        for (let i = 1; i < 6; i++) {
+            const currentTile = document.querySelector(
+                "#guess" + currentGuessCount + "Tile" + i,
+            );
+            currentTile.style.backgroundColor = color;
+        }
+    });
+};
+
 const checkWin = () => {
     if (solutionWord == currentGuess.dataset.letters) {
-        // alert("Game won! Congrats");
-        setTimeout(jumpTiles(), 500);
+        startWinColorEffect();
+        setTimeout(() => {
+            jumpTiles();
+        }, 500);
     } else {
         currentGuessCount++;
         currentGuess = document.querySelector("#guess" + currentGuessCount);
@@ -263,7 +305,6 @@ const shouldUpdateKeyboardState = (currentState, newState) => {
 
 const shakeCurrentGuess = () => {
     currentGuess.classList.add("shake");
-
     setTimeout(() => {
         currentGuess.classList.remove("shake");
     }, 400);
