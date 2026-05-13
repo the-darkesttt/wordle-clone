@@ -20,6 +20,7 @@ An example project is located in:
 
 ```text
 examples/task1-demo
+```
 
 ## Live Demo
 
