@@ -1,0 +1,9 @@
+{
+    "name": "wordle-task1-library",
+    "version": "1.0.0",
+    "description": "Generators and timeout iterator library for Wordle clone",
+    "main": "index.js",
+    "type": "module",
+    "author": "the-darkesttt",
+    "license": "MIT"
+}

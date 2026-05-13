@@ -1,3 +1,8 @@
+import {
+    colorCycleGenerator,
+    consumeIteratorWithTimeout,
+} from "./library/index.js";
+
 const lettersPattern = /^[A-Za-z][A-Za-z0-9]*$/;
 let currentGuessCount = 1;
 let currentGuess = document.querySelector("#guess" + currentGuessCount);
@@ -91,34 +96,6 @@ const submitGuess = () => {
             }, i * 200);
         }
     });
-};
-
-function* colorCycleGenerator() {
-    const colors = ["#6aaa64", "#c9b458", "#787c7e", "#538d4e"];
-    let index = 0;
-    while (true) {
-        yield colors[index];
-        index++;
-        if (index >= colors.length) {
-            index = 0;
-        }
-    }
-}
-
-const consumeIteratorWithTimeout = (iterator, timeoutInSeconds, callback) => {
-    const startTime = Date.now();
-    const timeoutInMilliseconds = timeoutInSeconds * 1000;
-
-    const interval = setInterval(() => {
-        const currentTime = Date.now();
-        const elapsedTime = currentTime - startTime;
-        if (elapsedTime >= timeoutInMilliseconds) {
-            clearInterval(interval);
-            return;
-        }
-        const nextValue = iterator.next().value;
-        callback(nextValue);
-    }, 150);
 };
 
 const checkIfGuessComplete = (i) => {

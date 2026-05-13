@@ -1,0 +1,11 @@
+{
+    "name": "task1-demo",
+    "version": "1.0.0",
+    "description": "Example project for using Task 1 library",
+    "author": "the-darkesttt",
+    "license": "MIT",
+    "type": "module",
+    "dependencies": {
+        "wordle-task1-library": "file:../../app/js/task1-library"
+    }
+}
