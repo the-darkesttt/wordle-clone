@@ -1,10 +1,15 @@
-import { memoize } from "./js/library/index.js";
+import { memoize, BiDirectionalPriorityQueue } from "./js/library/index.js";
 
 const lettersPattern = /^[A-Za-z][A-Za-z0-9]*$/;
 let currentGuessCount = 1;
 let currentGuess = document.querySelector("#guess" + currentGuessCount);
 
 let solutionWord = "";
+
+const gameEventsQueue = new BiDirectionalPriorityQueue();
+const addGameEvent = (message, priority) => {
+    gameEventsQueue.enqueue(message, priority);
+};
 
 const checkWordExists = (word) => {
     if (!/^[a-z]{5}$/.test(word)) {
@@ -30,11 +35,13 @@ const chooseWord = () => {
                 if (wordExists) {
                     solutionWord = normalizedWord;
                     console.log("Solution word:", solutionWord);
+                    addGameEvent("Solution word loaded", 40);
                 } else {
                     console.log(
                         "Invalid solution word from API:",
                         normalizedWord,
                     );
+                    addGameEvent("Invalid API word: " + normalizedWord, 70);
                     chooseWord();
                 }
             });
@@ -43,6 +50,7 @@ const chooseWord = () => {
             console.error("Error while choosing word:", error);
             solutionWord = "apple";
             console.log("Fallback solution word:", solutionWord);
+            addGameEvent("Fallback solution word used", 90);
         });
 };
 
@@ -108,9 +116,11 @@ const submitGuess = () => {
     const guessedWord = currentGuess.dataset.letters.toLowerCase();
     memoizedCheckWordExists(guessedWord).then((wordExists) => {
         if (!wordExists) {
+            addGameEvent("Invalid guess: " + guessedWord, 80);
             shakeCurrentGuess();
             return;
         }
+        addGameEvent("Valid guess: " + guessedWord, 50);
         for (let i = 0; i < 5; i++) {
             setTimeout(() => {
                 revealTile(i, checkLetter(i));
@@ -190,6 +200,7 @@ const startWinColorEffect = () => {
 
 const checkWin = () => {
     if (solutionWord == currentGuess.dataset.letters) {
+        addGameEvent("Player won the game", 100);
         startWinColorEffect();
         setTimeout(() => {
             jumpTiles();
@@ -204,6 +215,7 @@ const checkWin = () => {
 };
 
 const showSolution = () => {
+    addGameEvent("Player lost. Solution was: " + solutionWord, 100);
     alert(
         "Better luck next time. Solution word is " + "'" + solutionWord + "'",
     );
@@ -341,3 +353,21 @@ const shakeCurrentGuess = () => {
         currentGuess.classList.remove("shake");
     }, 400);
 };
+
+const testGameEventsQueue = () => {
+    console.log("----- Priority Queue Test -----");
+
+    console.log("Peek highest:", gameEventsQueue.peek("highest"));
+    console.log("Peek lowest:", gameEventsQueue.peek("lowest"));
+    console.log("Peek oldest:", gameEventsQueue.peek("oldest"));
+    console.log("Peek newest:", gameEventsQueue.peek("newest"));
+
+    console.log("Dequeue highest:", gameEventsQueue.dequeue("highest"));
+    console.log("Dequeue lowest:", gameEventsQueue.dequeue("lowest"));
+    console.log("Dequeue oldest:", gameEventsQueue.dequeue("oldest"));
+    console.log("Dequeue newest:", gameEventsQueue.dequeue("newest"));
+
+    console.log("Queue size after test:", gameEventsQueue.getSize());
+};
+window.testGameEventsQueue = testGameEventsQueue;
+window.gameEventsQueue = gameEventsQueue;
