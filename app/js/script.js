@@ -1,8 +1,4 @@
-import {
-    // colorCycleGenerator,
-    // consumeIteratorWithTimeout,
-    memoize,
-} from "./js/library/index.js";
+import { memoize } from "./js/library/index.js";
 
 const lettersPattern = /^[A-Za-z][A-Za-z0-9]*$/;
 let currentGuessCount = 1;
@@ -10,19 +6,43 @@ let currentGuess = document.querySelector("#guess" + currentGuessCount);
 
 let solutionWord = "";
 
+const checkWordExists = (word) => {
+    if (!/^[a-z]{5}$/.test(word)) {
+        return Promise.resolve(false);
+    }
+    return fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+        .then((response) => response.ok)
+        .catch((error) => {
+            console.error("Dictionary API error:", error);
+            return false;
+        });
+};
+
 const chooseWord = () => {
     fetch(
         "https://random-words-api.kushcreates.com/api?language=en&category=wordle&length=5&words=1&type=lowercase",
     )
         .then((response) => response.json())
         .then((data) => {
-            solutionWord = data[0].word || data[0];
-            solutionWord = solutionWord.toLowerCase();
-            console.log("Solution word:", solutionWord);
+            const randomWord = data[0].word || data[0];
+            const normalizedWord = randomWord.toLowerCase();
+            return checkWordExists(normalizedWord).then((wordExists) => {
+                if (wordExists) {
+                    solutionWord = normalizedWord;
+                    console.log("Solution word:", solutionWord);
+                } else {
+                    console.log(
+                        "Invalid solution word from API:",
+                        normalizedWord,
+                    );
+                    chooseWord();
+                }
+            });
         })
         .catch((error) => {
             console.error("Error while choosing word:", error);
             solutionWord = "apple";
+            console.log("Fallback solution word:", solutionWord);
         });
 };
 
@@ -232,18 +252,6 @@ const checkLetter = (position) => {
 
 const checkLetterExists = (letter) => {
     return solutionWord.includes(letter);
-};
-
-const checkWordExists = (word) => {
-    if (!/^[a-z]{5}$/.test(word)) {
-        return Promise.resolve(false);
-    }
-    return fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
-        .then((response) => response.ok)
-        .catch((error) => {
-            console.error("Dictionary API error:", error);
-            return false;
-        });
 };
 
 const memoizedCheckWordExists = memoize(checkWordExists, {
