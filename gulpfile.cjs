@@ -21,9 +21,26 @@ function scssTask() {
 }
 
 // JavaScript Task
+// function jsTask() {
+//     return src("app/js/script.js", { sourcemaps: true })
+//         .pipe(babel({ presets: ["@babel/preset-env"] }))
+//         .pipe(terser())
+//         .pipe(dest("dist", { sourcemaps: "." }));
+// }
 function jsTask() {
     return src("app/js/script.js", { sourcemaps: true })
-        .pipe(babel({ presets: ["@babel/preset-env"] }))
+        .pipe(
+            babel({
+                presets: [
+                    [
+                        "@babel/preset-env",
+                        {
+                            modules: false,
+                        },
+                    ],
+                ],
+            }),
+        )
         .pipe(terser())
         .pipe(dest("dist", { sourcemaps: "." }));
 }

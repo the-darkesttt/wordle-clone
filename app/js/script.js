@@ -1,3 +1,9 @@
+import {
+    // colorCycleGenerator,
+    // consumeIteratorWithTimeout,
+    memoize,
+} from "./js/library/index.js";
+
 const lettersPattern = /^[A-Za-z][A-Za-z0-9]*$/;
 let currentGuessCount = 1;
 let currentGuess = document.querySelector("#guess" + currentGuessCount);
@@ -80,7 +86,7 @@ document.addEventListener("keydown", (e) => {
 
 const submitGuess = () => {
     const guessedWord = currentGuess.dataset.letters.toLowerCase();
-    checkWordExists(guessedWord).then((wordExists) => {
+    memoizedCheckWordExists(guessedWord).then((wordExists) => {
         if (!wordExists) {
             shakeCurrentGuess();
             return;
@@ -239,6 +245,12 @@ const checkWordExists = (word) => {
             return false;
         });
 };
+
+const memoizedCheckWordExists = memoize(checkWordExists, {
+    maxSize: 50,
+    strategy: "LRU",
+    ttl: 5 * 60 * 1000,
+});
 
 const revealTile = (i, state) => {
     let tileNumber = i + 1;
