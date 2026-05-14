@@ -6,8 +6,8 @@
     "license": "MIT",
     "type": "module",
     "scripts": {
-        "start": "gulp",
-        "build": "gulp"
+        "start": "gulp --gulpfile gulpfile.cjs",
+        "build": "gulp --gulpfile gulpfile.cjs build"
     },
     "dependencies": {
         "@babel/core": "^7.14.8",
