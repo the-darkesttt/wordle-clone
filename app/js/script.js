@@ -17,6 +17,81 @@ const addGameEvent = (message, priority) => {
     gameEventsQueue.enqueue(message, priority);
 };
 
+const getWinPercent = (stats) => {
+    if (stats.played === 0) {
+        return 0;
+    }
+    return Math.round((stats.wins / stats.played) * 100);
+};
+
+const renderStats = () => {
+    const stats = getStats();
+    const playedElement = document.querySelector("#stats-played");
+    const winPercentElement = document.querySelector("#stats-win-percent");
+    const currentStreakElement = document.querySelector(
+        "#stats-current-streak",
+    );
+    const maxStreakElement = document.querySelector("#stats-max-streak");
+    if (!playedElement) {
+        return;
+    }
+    playedElement.innerText = stats.played;
+    winPercentElement.innerText = getWinPercent(stats);
+    currentStreakElement.innerText = stats.currentStreak;
+    maxStreakElement.innerText = stats.maxStreak;
+
+    renderGuessDistribution(stats);
+};
+
+const renderGuessDistribution = (stats) => {
+    const container = document.querySelector("#guess-distribution");
+    if (!container) {
+        return;
+    }
+    container.innerHTML = "";
+    for (let i = 1; i <= 6; i++) {
+        const row = document.createElement("p");
+        row.innerText = i + ": " + stats.guessDistribution[i];
+        container.appendChild(row);
+    }
+};
+
+const openStatsModal = () => {
+    renderStats();
+    const modal = document.querySelector("#stats-modal");
+    if (modal) {
+        modal.classList.remove("hidden");
+    }
+};
+
+const closeStatsModal = () => {
+    const modal = document.querySelector("#stats-modal");
+    if (modal) {
+        modal.classList.add("hidden");
+    }
+};
+
+const setupStatsModal = () => {
+    const statsButton = document.querySelector("#stats-button");
+    const closeStatsButton = document.querySelector("#close-stats");
+    const statsModal = document.querySelector("#stats-modal");
+    if (statsButton) {
+        statsButton.addEventListener("click", openStatsModal);
+    }
+    if (closeStatsButton) {
+        closeStatsButton.addEventListener("click", closeStatsModal);
+    }
+    if (statsModal) {
+        statsModal.addEventListener("click", (event) => {
+            if (event.target === statsModal) {
+                closeStatsModal();
+            }
+        });
+    }
+};
+
+setupStatsModal();
+
 const checkWordExists = (word) => {
     if (!/^[a-z]{5}$/.test(word)) {
         return Promise.resolve(false);
