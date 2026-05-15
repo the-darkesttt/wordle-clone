@@ -1,4 +1,10 @@
-import { memoize, BiDirectionalPriorityQueue } from "./js/library/index.js";
+import {
+    memoize,
+    BiDirectionalPriorityQueue,
+    getStats,
+    saveGameResult,
+    resetStats,
+} from "./js/library/index.js";
 
 const lettersPattern = /^[A-Za-z][A-Za-z0-9]*$/;
 let currentGuessCount = 1;
@@ -201,6 +207,7 @@ const startWinColorEffect = () => {
 const checkWin = () => {
     if (solutionWord == currentGuess.dataset.letters) {
         addGameEvent("Player won the game", 100);
+        saveGameResult(true, currentGuessCount);
         startWinColorEffect();
         setTimeout(() => {
             jumpTiles();
@@ -216,6 +223,7 @@ const checkWin = () => {
 
 const showSolution = () => {
     addGameEvent("Player lost. Solution was: " + solutionWord, 100);
+    saveGameResult(false);
     alert(
         "Better luck next time. Solution word is " + "'" + solutionWord + "'",
     );
