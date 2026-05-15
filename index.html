@@ -15,6 +15,42 @@
 
 <body>
 	<h1>Wordle Clone</h1>
+	<button type="button" id="stats-button" class="stats-button">Stats</button>
+	<section class="stats-modal hidden" id="stats-modal">
+		<div class="stats-modal__content">
+			<button type="button" id="close-stats" class="stats-modal__close">
+				×
+			</button>
+
+			<h2>Statistics</h2>
+
+			<div class="stats-numbers">
+				<div class="stats-number">
+					<strong id="stats-played">0</strong>
+					<span>Played</span>
+				</div>
+
+				<div class="stats-number">
+					<strong id="stats-win-percent">0</strong>
+					<span>Win %</span>
+				</div>
+
+				<div class="stats-number">
+					<strong id="stats-current-streak">0</strong>
+					<span>Current Streak</span>
+				</div>
+
+				<div class="stats-number">
+					<strong id="stats-max-streak">0</strong>
+					<span>Max Streak</span>
+				</div>
+			</div>
+
+			<h3>Guess Distribution</h3>
+
+			<div id="guess-distribution" class="guess-distribution"></div>
+		</div>
+	</section>
 	<section class="game">
 		<div id="guess1" class="guess" data-letters="">
 			<div class="guess__tile" id="guess1Tile1"></div>
