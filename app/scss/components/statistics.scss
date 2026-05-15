@@ -38,34 +38,34 @@ header {
     justify-content: center;
     padding: rem(16);
     background-color: hsla(0, 0%, 0%, 0.45);
+
+    &__content {
+        position: relative;
+        width: 100%;
+        max-width: rem(500);
+        padding: rem(24);
+        border-radius: rem(12);
+        background-color: hsl(142, 12%, 65%);
+        color: #0e463f;
+        text-align: center;
+        box-shadow: rem(60) rem(60) rem(120) rgba(0, 0, 0, 0.5);
+    }
+
+    &__close {
+        position: absolute;
+        top: rem(12);
+        right: rem(12);
+        border: none;
+        background: none;
+        font-size: rem(28);
+        line-height: 1;
+        color: hsl(331, 85%, 39%);
+        cursor: pointer;
+    }
 }
 
 .stats-modal.hidden {
     display: none;
-}
-
-.stats-modal__content {
-    position: relative;
-    width: 100%;
-    max-width: rem(500);
-    padding: rem(24);
-    border-radius: rem(12);
-    background-color: hsl(142, 12%, 65%);
-    color: #0e463f;
-    text-align: center;
-    box-shadow: rem(60) rem(60) rem(120) rgba(0, 0, 0, 0.5);
-}
-
-.stats-modal__close {
-    position: absolute;
-    top: rem(12);
-    right: rem(12);
-    border: none;
-    background: none;
-    font-size: rem(28);
-    line-height: 1;
-    color: hsl(331, 85%, 39%);
-    cursor: pointer;
 }
 
 .stats-numbers {
@@ -87,5 +87,32 @@ header {
 
 .stats-number span {
     font-size: rem(12);
+    line-height: 1.2;
+}
+
+.guess-distribution {
+    margin-top: rem(12);
+}
+
+.stats-row {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    margin-bottom: rem(6);
+
+    &__number {
+        width: rem(16);
+        font-weight: 700;
+        text-align: center;
+    }
+}
+
+.stats-bar {
+    min-width: rem(24);
+    padding: rem(4) rem(8);
+    background-color: hsl(148, 35%, 39%);
+    color: hsl(142, 12%, 65%);
+    text-align: right;
+    font-weight: 700;
     line-height: 1.2;
 }

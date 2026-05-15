@@ -49,9 +49,19 @@ const renderGuessDistribution = (stats) => {
         return;
     }
     container.innerHTML = "";
+    const distributionValues = Object.values(stats.guessDistribution);
+    const maxValue = Math.max(...distributionValues, 1);
     for (let i = 1; i <= 6; i++) {
-        const row = document.createElement("p");
-        row.innerText = i + ": " + stats.guessDistribution[i];
+        const count = stats.guessDistribution[i];
+        const widthPercent = Math.max((count / maxValue) * 100, 8);
+        const row = document.createElement("div");
+        row.classList.add("stats-row");
+        row.innerHTML = `
+            <span class="stats-row__number">${i}</span>
+            <div class="stats-bar" style="width: ${widthPercent}%">
+                ${count}
+            </div>
+        `;
         container.appendChild(row);
     }
 };
