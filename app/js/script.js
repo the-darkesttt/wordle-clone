@@ -297,6 +297,9 @@ const checkWin = () => {
         setTimeout(() => {
             jumpTiles();
         }, 500);
+        setTimeout(() => {
+            openStatsModal();
+        }, 2500);
     } else {
         currentGuessCount++;
         currentGuess = document.querySelector("#guess" + currentGuessCount);
@@ -312,6 +315,9 @@ const showSolution = () => {
     alert(
         "Better luck next time. Solution word is " + "'" + solutionWord + "'",
     );
+    setTimeout(() => {
+        openStatsModal();
+    }, 500);
 };
 
 const updateLetters = (letter) => {
